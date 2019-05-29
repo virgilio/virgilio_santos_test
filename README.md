@@ -10,7 +10,7 @@ tests given
 * The last challenge is implemented as a full, ready to deploy library that can grow as it gets more features. For that I've used a implementation that considers a one way data flow using a Publisher/Subscriber pattern. All servers read from a local cache but only writes based on all events on the overall cache scenario. The expiration is handled locally while operations are not being handled.
 
 ## Getting Started
-* To quickly use the code, download it where it can be seen by your application then 
+* To quickly use the code, download it where it can be seen by your application then
 ```python
 from util.util import is_overlapped, Version as v
 
@@ -37,7 +37,7 @@ v('1.2') > v('1.3')
     cache = []
     for _td in servers:
         cache.append(DistributedLRUCache(*_td))
-    
+
     _cache = cache[0]
     data = _cache.get('sample-data'):
     if not data:
@@ -45,7 +45,7 @@ v('1.2') > v('1.3')
     me = ip('me')
     closest_server = _cache.closest_server(me)
     ## ... ###
-       
+
 ```
 
 ## Organization
@@ -91,3 +91,4 @@ For more information please contact author through `virgilio.santos` at `gmail.c
 2. Submit code to QA/CI and coverage services
 3. Create a autodiscover service so one can add and remove servers on the fly based on
 4. Better requirement handling
+5. Benchmark the Cache library
