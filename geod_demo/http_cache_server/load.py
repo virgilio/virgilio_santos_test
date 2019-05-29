@@ -1,14 +1,15 @@
-from requests import put, get
+""" Load data into the 3 servers """
 from random import randint
+from requests import put
 
-servers = [
+SERVERS = [
     'http://localhost:5000',
     'http://localhost:5001',
     'http://localhost:5002',
 ]
 
-
-sentences = ['Aequam igitur pronuntiabitsententiam ratio adhibita primum divinarum humanarumque rerumscientia, quae potest appellaririte sapientia, deinde adiunctisvirtutibus, quas ratio rerum omnium dominas, tu voluptatumsatellites et ministras essevoluisti.',
+#pylint: disable=line-too-long
+SENTENCES = ['Aequam igitur pronuntiabitsententiam ratio adhibita primum divinarum humanarumque rerumscientia, quae potest appellaririte sapientia, deinde adiunctisvirtutibus, quas ratio rerum omnium dominas, tu voluptatumsatellites et ministras essevoluisti.',
              'Pertinere autem ad rem arbitrantur intellegi natura fieri ut liberi a parentibus amentur.',
              'Huc et illuc, Torquate, vosversetis licet, nihil in hac praeclara epistula scriptum ab Epicurocongruens et conveniensdecretis eius reperietis.',
              'Haec ego non possum dicere nonesse hominis quamvis et belli et humani, sapientis vero nullo modo, physici praesertim,quem se ille esse vult, putare ullum essecuiusquam diem natalem.',
@@ -109,6 +110,6 @@ sentences = ['Aequam igitur pronuntiabitsententiam ratio adhibita primum divinar
              'Verum hoc loco sumo verbis his eandemcerte vim voluptatis Epicurum nosse quam ceteros.',
              'Ut vero conservetur omnis homini erga hominem societas, coniunctio, caritas, et emolumenta et detrimenta, quae etappellant, communia esse voluerunt; quorum altera prosunt, nocent altera.']
 
-
 for i in range(100):
-    r = put('{}/cache/key{}'.format(servers[randint(0, 2)], i), data={'data': sentences[randint(0, len(sentences)-1)]})
+    put('{}/cache/key{}'.format(SERVERS[randint(0, 2)], i),
+        data={'data': SENTENCES[randint(0, len(SENTENCES)-1)]})

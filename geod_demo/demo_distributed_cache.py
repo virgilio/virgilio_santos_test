@@ -4,6 +4,8 @@ from geod_lrucache import DistributedLRUCache
 from geocoder import ip
 
 def distributed_cache_demo():
+    """ Method creates 3 cache instances and runs 50 samples prints two
+    retrieval (a hit and a miss) and a proximity report  """
     servers = [
         (5, [{'url': 'localhost', 'port': 5122, 'latlng': (41.49008, -71.312796)},
              {'url': 'localhost', 'port': 5123, 'latlng': (41.499498, -81.695391)},
@@ -17,19 +19,19 @@ def distributed_cache_demo():
     ]
 
     cache = []
-    for td in servers:
-        cache.append(DistributedLRUCache(*td))
-    for n in range(50):
-        cache[randint(0, 2)].set('sample-{}'.format(n),
-                                 'Sample data #{}'.format(n))
-    for c in cache:
-        c.print()
+    for _td in servers:
+        cache.append(DistributedLRUCache(*_td))
+    for _sd in range(50):
+        cache[randint(0, 2)].set('sample-{}'.format(_sd),
+                                 'Sample data #{}'.format(_sd))
+    for instance in cache:
+        instance.print()
 
-    for c in cache:
+    for instance in cache:
         location = ip('201.17.101.45')
-        print(c.get('sample-49'))
-        print(c.get('sample-2'))
-        print(c.closest_server(location))
+        print(instance.get('sample-49'))
+        print(instance.get('sample-2'))
+        print(instance.closest_server(location))
 
 if __name__ == '__main__':
     distributed_cache_demo()
