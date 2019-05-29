@@ -32,7 +32,7 @@ The repo is organized in the following way:
 ~/virgilio_santos_test $ cd geod_demo/http_cache_server/
 ~/virgilio_santos_test $ docker-compose up
 ```
-You will have available 3 servers (localhost:{5000,5001,5002}) with 3 base url:
+You will have available 3 servers (`localhost:{5000,5001,5002}`) with 3 base url:
   * `GET /cache/<key>` to add a item to a cache
   * `PUT /cache/<key>` body should have `data` either Json `{"data": "sample data"}` or url `data=sample data`
   * `GET /` to see a overall state of the cache
