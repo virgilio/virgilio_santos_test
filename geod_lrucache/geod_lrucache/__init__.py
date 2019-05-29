@@ -11,7 +11,6 @@ import threading
 import json
 import zmq
 
-from geocoder import ip
 from geopy.distance import distance
 
 from .cache import LRUCache
@@ -24,10 +23,10 @@ EXPIRATION_TIME = 60
 class DistributedLRUCache(LRUCache):
     """ """
 
-    def __init__(self, size: int, servers, server=None):
+    def __init__(self, size: int, servers, port):
         super().__init__(size)
-        self.server = self.closest_server(servers) if not server else server
-        self.publisher = ZMQPublisher(self.server['port'])
+        self.servers = servers
+        self.publisher = ZMQPublisher(port)
         self.start(servers)
 
     def buffer_operation(self, op, key: str, data=None):
@@ -66,13 +65,11 @@ class DistributedLRUCache(LRUCache):
         self.publisher.close()
         self.subscriber_thread.destroy()
 
-    @staticmethod
-    def closest_server(servers):
-        me = ip('me')
+    def closest_server(self, location):
         distances = [
             {
-                'port': server['port'],
-                'distance': distance(me.latlng, server['latlng'])
-            } for server in servers
+                'server': server,
+                'distance': distance(location.latlng, server['latlng'])
+            } for server in self.servers
         ]
         return min(distances, key=lambda s: s['distance'])
