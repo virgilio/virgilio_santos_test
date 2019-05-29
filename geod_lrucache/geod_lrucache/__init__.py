@@ -69,7 +69,7 @@ class DistributedLRUCache(LRUCache):
         distances = [
             {
                 'server': server,
-                'distance': distance(location.latlng, server['latlng'])
+                'distance': distance(location.latlng, server['latlng']).m
             } for server in self.servers
         ]
         return min(distances, key=lambda s: s['distance'])
