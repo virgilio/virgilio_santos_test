@@ -92,3 +92,8 @@ For more information please contact author through `virgilio.santos` at `gmail.c
 3. Create a autodiscover service so one can add and remove servers on the fly based on
 4. Better requirement handling
 5. Benchmark the Cache library
+
+## References
+1. https://memcached.org/blog/modern-lru
+2. https://en.wikipedia.org/wiki/Cache_replacement_policies
+3. https://www.quora.com/What-is-the-best-way-to-Implement-an-LRU-Cache
