@@ -8,8 +8,7 @@ tests given
 The repo is organized in the following way:
 1. A util directory with a simple python package where Question A and B of the test are implemented inside a util.py file and can be tested using test_util.py file
 ``` ~/virgilio_santos_test $ cd util/
- ~/virgilio_santos_test/util $ nosetests test_util.py
-``` For implementation details, please read the functions doc strings.
+ ~/virgilio_santos_test/util $ nosetests test_util.py``` For implementation details, please read the functions doc strings.
 
 2. A geod_lrucache directory which contains a full structured python lib to be installed with a package manager like pip. It's based on cookiecutter `audreyr/cookiecutter-pypackage` template and ready to grow as a robust piece of code. Checkout https://github.com/virgilio/virgilio_santos_test/blob/master/geod_lrucache/README.rst for more information about the library itself and implementation design details.
 *For the test specific purposes* please look into: `virgilio_santos_test/geod_lrucache/geod_lrucache/geod_lrucache.py` file
