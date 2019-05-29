@@ -5,23 +5,18 @@
 import time
 import json
 
-from geocoder import ip
-from geopy.distance import distance
-
-from .queue import ZMQPublisher, ZMQSubscriber
-
 OP_SET = 'SET'
 OP_UPDATE = 'UPDATE'
 EXPIRATION_TIME = 60
 
-
+#pylint: disable=too-few-public-methods
 class Node():
-    """ """
+    """ Doubly Linked List node """
 
     def __init__(self, key: str, data, _next=None, _prev=None):
         self.key = key
-        self._next = _next
-        self._prev = _prev
+        self.next = _next
+        self.prev = _prev
         self.data = data
         self.time = time.time()
 
@@ -34,7 +29,7 @@ class Node():
 
 
 class LRUCache():
-    """ """
+    """ Base LRUCache class that operates locally """
 
     def __init__(self, size: int):
         self.size = size
@@ -44,6 +39,7 @@ class LRUCache():
         self.pages = {}
 
     def set_local(self, key: str, data):
+        """ Set a item in local cache """
         if key in self.pages:
             node = self.pages[key]
             if not node.data == data:
@@ -56,47 +52,54 @@ class LRUCache():
             self._create_page(node)
 
     def update_cache(self, key: str):
+        """ Update a cache when it hits """
         if key in self.pages:
             node = self.pages[key]
             self._move_to_top(node)
 
     def evict_expired(self, snap_time, delta):
+        """ Handle expired nodes """
         pages = list(self.pages.keys())
         for page in pages:
             if snap_time - self.pages[page].time > delta:
                 self._evict_page(self.pages[page])
 
-    def _evict_page(self, node):
+    def _evict_page(self, node: Node):
+        """ Destroy a cache page """
         self._remove_item(node)
         del self.pages[node.key]
 
-    def _create_page(self, node):
+    def _create_page(self, node: Node):
+        """ Create a cache page """
         self._add_item(node)
         self.pages[node.key] = node
 
     def _move_to_top(self, node: Node):
+        """ Move an existent item to top of the list """
         if not self.head == node:
             self._remove_item(node)
             self._add_item(node)
         node.time = time.time()
 
     def _remove_item(self, node: Node):
+        """ Removes a specific node """
         if node == self.tail and node == self.head:
             self.head = self.tail = None
         elif node == self.tail:
-            self.tail = node._prev if node._prev else None
+            self.tail = node.prev if node.prev else None
         elif node == self.head:
-            self.head = node._next if node._next else None
+            self.head = node.next if node.next else None
         else:
-            node._prev._next = node._next
-            node._next._prev = node._prev
-        node._next = None
-        node._prev = None
+            node.prev.next = node.next
+            node.next.prev = node.prev
+        node.next = None
+        node.prev = None
 
     def _add_item(self, node: Node):
+        """ Add an item to top of the List """
         if self.head:
-            self.head._prev = node
-            node._next = self.head
+            self.head.prev = node
+            node.next = self.head
             self.head = node
         else:
             self.head = node
@@ -107,8 +110,9 @@ class LRUCache():
         items = []
         while head:
             items.append(json.loads(str(head)))
-            head = head._next
+            head = head.next
         return json.dumps(items)
 
     def print(self):
+        """ Print the Cache state to the screen """
         print(str(self))

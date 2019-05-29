@@ -21,7 +21,8 @@ OP_UPDATE = 'UPDATE'
 EXPIRATION_TIME = 60
 
 class DistributedLRUCache(LRUCache):
-    """ """
+    """ Implements the Distributed Cache with LRU Strategy using ZMQ
+    Queue to handle messages among servers"""
 
     def __init__(self, size: int, servers, port):
         super().__init__(size)
@@ -29,25 +30,28 @@ class DistributedLRUCache(LRUCache):
         self.publisher = ZMQPublisher(port)
         self.start(servers)
 
-    def buffer_operation(self, op, key: str, data=None):
+    def buffer_operation(self, _op, key: str, data=None):
+        """ Send operation to buffer """
         message = json.dumps({
-            'op': op,
+            'op': _op,
             'key': key,
             'data': data
         })
         self.publisher.send(message)
 
     def get(self, key: str):
+        """ Try to get a page by key, returns the data or False for a miss """
         if key in self.pages:
             self.buffer_operation(OP_UPDATE, key)
             return self.pages[key]
-        else:
-            return False
+        return False
 
     def set(self, key: str, data):
+        """ Set page """
         self.buffer_operation(OP_SET, key, data=data)
 
     def handle_operation(self, data):
+        """ Operation Handler """
         message = json.loads(data.decode())
         if message['op'] == OP_SET:
             self.set_local(message['key'], message['data'])
@@ -55,17 +59,21 @@ class DistributedLRUCache(LRUCache):
             self.update_cache(message['key'])
 
     def handle_expiration(self):
+        """ Expiration handler """
         self.evict_expired(time.time(), EXPIRATION_TIME)
 
     def start(self, servers):
+        """ Start the subscriber Thread """
         self.subscriber_thread = ZMQSubscriber(servers, EXPIRATION_TIME, self)
         self.subscriber_thread.start()
 
     def destroy(self):
+        """ Destroy all sockets """
         self.publisher.close()
         self.subscriber_thread.destroy()
 
     def closest_server(self, location):
+        """ Calculates the closest server """
         distances = [
             {
                 'server': server,
