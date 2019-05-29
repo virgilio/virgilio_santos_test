@@ -102,12 +102,13 @@ class LRUCache():
             self.head = node
             self.tail = node
 
-    def print(self):
+    def __str__(self):
         head = self.head
         items = []
         while head:
             items.append(json.loads(str(head)))
             head = head._next
-        print(items)
-        return items
+        return json.dumps(items)
 
+    def print(self):
+        print(str(self))
