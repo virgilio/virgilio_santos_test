@@ -1,0 +1,5 @@
+Flask==1.0.3
+Flask-RESTful==0.3.7
+geocoder==1.38.1
+geopy==1.20.0
+pyzmq==18.0.1
