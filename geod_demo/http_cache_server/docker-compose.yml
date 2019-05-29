@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  geod_server_1:
+    build: .
+    hostname: geod_server_1
+    ports:
+      - "5000:5000"
+      - "5122:5122"
+    environment:
+      - SERVER_1=geod_server_1:5122
+      - SERVER_2=geod_server_2:5123
+      - SERVER_3=geod_server_3:5124
+      - LATLNG_1=(41.49008, -71.312796)
+      - LATLNG_2=(41.499498, -81.695391)
+      - LATLNG_3=(52.5094982, 13.3765983)
+      - PUB_PORT=5122
+      - CACHE_SIZE=50
+  geod_server_2:
+    build: .
+    hostname: geod_server_2
+    ports:
+      - "5001:5000"
+      - "5123:5123"
+    environment:
+      - SERVER_1=geod_server_1:5122
+      - SERVER_2=geod_server_2:5123
+      - SERVER_3=geod_server_3:5124
+      - LATLNG_1=(41.49008, -71.312796)
+      - LATLNG_2=(41.499498, -81.695391)
+      - LATLNG_3=(52.5094982, 13.3765983)
+      - PUB_PORT=5123
+      - CACHE_SIZE=50
+  geod_server_3:
+    build: .
+    hostname: geod_server_3
+    ports:
+      - "5002:5000"
+      - "5124:5124"
+    environment:
+      - SERVER_1=geod_server_1:5122
+      - SERVER_2=geod_server_2:5123
+      - SERVER_3=geod_server_3:5124
+      - LATLNG_1=(41.49008, -71.312796)
+      - LATLNG_2=(41.499498, -81.695391)
+      - LATLNG_3=(52.5094982, 13.3765983)
+      - PUB_PORT=5124
+      - CACHE_SIZE=50
