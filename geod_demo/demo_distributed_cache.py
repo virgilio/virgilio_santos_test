@@ -1,18 +1,19 @@
 """ Demo distributed cache """
 from random import randint
 from geod_lrucache import DistributedLRUCache
+from geocoder import ip
 
 def distributed_cache_demo():
     servers = [
         (5, [{'url': 'localhost', 'port': 5122, 'latlng': (41.49008, -71.312796)},
              {'url': 'localhost', 'port': 5123, 'latlng': (41.499498, -81.695391)},
-             {'url': 'localhost', 'port': 5124, 'latlng': (52.5094982, 13.3765983)}]),
+             {'url': 'localhost', 'port': 5124, 'latlng': (52.5094982, 13.3765983)}], 5122),
         (5, [{'url': 'localhost', 'port': 5122, 'latlng': (41.499498, -81.695391)},
              {'url': 'localhost', 'port': 5123, 'latlng': (41.49008, -71.312796)},
-             {'url': 'localhost', 'port': 5124, 'latlng': (52.5094982, 13.3765983)}]),
+             {'url': 'localhost', 'port': 5124, 'latlng': (52.5094982, 13.3765983)}], 5123),
         (5, [{'url': 'localhost', 'port': 5122, 'latlng': (52.5094982, 13.3765983)},
              {'url': 'localhost', 'port': 5123, 'latlng': (41.499498, -81.695391)},
-             {'url': 'localhost', 'port': 5124, 'latlng': (41.49008, -71.312796)}]),
+             {'url': 'localhost', 'port': 5124, 'latlng': (41.49008, -71.312796)}], 5124),
     ]
 
     cache = []
@@ -25,8 +26,10 @@ def distributed_cache_demo():
         c.print()
 
     for c in cache:
+        location = ip('201.17.101.45')
         print(c.get('sample-49'))
         print(c.get('sample-2'))
+        print(c.closest_server(location))
 
 if __name__ == '__main__':
     distributed_cache_demo()
