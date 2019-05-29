@@ -2,7 +2,7 @@ import json
 from flask import Flask, request
 from flask_restful import Resource, Api
 
-from .geod_lru_cache import DistributedLRUCache
+from geod_lrucache import DistributedLRUCache
 
 app = Flask(__name__)
 api = Api(app)

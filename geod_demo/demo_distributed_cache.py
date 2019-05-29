@@ -1,7 +1,6 @@
 """ Demo distributed cache """
 from random import randint
-from geod_lru_cache import DistributedLRUCache
-
+from geod_lrucache import DistributedLRUCache
 
 def distributed_cache_demo():
     servers = [
