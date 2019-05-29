@@ -26,7 +26,11 @@ Geo Distributed LRU Cache is a library that provides Distributed Cache and can b
 Features
 --------
 
-* TODO
+* ZMQ pretty fast queue handler
+* Unlimited server options
+* Easily integrated with your code
+* Time expiration auto handling
+* MIT licensed
 
 Credits
 -------
